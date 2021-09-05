@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  tinyproxy:
+    image: vimagick/tinyproxy
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./tinyproxy:/etc/tinyproxy
+    restart: unless-stopped
+    entrypoint: tinyproxy -d -c /etc/tinyproxy/reverseproxy.conf
+  web:
+    image: ghcr.io/syuparn/webawk:0.3.0
+    entrypoint: ./webawk.sh 'GET("/names") { b["names"][1]="Taro"; res(200, b) }'
+    ports:
+      - "8081:8080"
